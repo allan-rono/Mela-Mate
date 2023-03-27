@@ -1,1 +1,7 @@
-<p>upload-image works!</p>
+<div>
+  <h2>Upload Image</h2>
+  <form (submit)="onSubmit()">
+    <input type="file" (change)="onFileSelected($event)" />
+    <button type="submit">Upload</button>
+  </form>
+</div>
