@@ -1,0 +1,16 @@
+{
+  "name": "mela_mate_backend",
+  "version": "1.0.0",
+  "description": "This is the backend that will handle image uploads, run a machine leraning model using an external python script",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Allan Rono",
+  "license": "ISC",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
