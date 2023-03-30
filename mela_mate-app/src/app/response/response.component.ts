@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -6,15 +6,23 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './response.component.html',
   styleUrls: ['./response.component.css']
 })
-export class ResponseComponent {
-  response = '';
+export class ResponseComponent implements OnInit {
+  response!: string;
+  responseMessage: string = "This is a test response message";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  onSubmit() {
-    this.http.get('http://localhost:4200/response')
-      .subscribe((response: any) => {
+  ngOnInit(): void {
+  }
+
+  getResponse() {
+    this.http.get('http://localhost:3000/response').subscribe(
+      (response: any) => {
         this.response = response;
-      });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }

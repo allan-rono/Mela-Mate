@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-image',
@@ -9,23 +9,28 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UploadImageComponent {
   selectedFile: File | null = null;
+  response: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+    this.selectedFile = <File>event.target.files[0];
   }
-
   onSubmit() {
+
     if (!this.selectedFile) {
-      console.error('No file selected.');
       return;
     }
-    const fd = new FormData();
-    fd.append('image', this.selectedFile, this.selectedFile.name);
-    this.http.post('http://localhost:4200/upload', fd)
-      .subscribe((response: any) => {
-        console.log(response);
-      });
+    const formData = new FormData();
+    formData.append('image', this.selectedFile, this.selectedFile.name);
+
+    this.http.post<any>('http://localhost:3000/upload', formData).subscribe(
+      (response) => {
+        this.response = `Upload successful: ${response}`;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }

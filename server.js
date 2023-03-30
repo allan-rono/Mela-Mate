@@ -1,35 +1,34 @@
 const express = require('express');
 const multer = require('multer');
-const { spawn } = require('child_process');
+const cors = require('cors');
+
 
 const app = express();
+const port = 3000;
 
-// Set up multer for file uploads
+app.use(cors());
+// configure multer storage
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads');
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/')
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
+  filename: (req, file, cb) => {
+    const fileExt = file.originalname.split('.').pop();
+    const filename = `${file.fieldname}-${Date.now()}.${fileExt}`;
+    cb(null, filename);
   }
 });
 
+// configure multer
 const upload = multer({ storage: storage });
 
-// Define server endpoints
-app.post('/upload', upload.single('image'), (req, res) => {
-  // Get file path of uploaded image
-  const imagePath = req.file.path;
-
-  // Run Python script to determine if image is melanoma
-  const pythonProcess = spawn('python', ['melanoma_detection.py', imagePath]);
-  pythonProcess.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-    // Send response to client
-    res.send(data);
-  });
+// define endpoint for image upload
+app.post('/upload', upload.single('file'), (req, res) => {
+  console.log('File uploaded successfully!');
+  res.status(200).send('File uploaded successfully!');
 });
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+// start server
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
 });
