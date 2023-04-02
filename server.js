@@ -1,31 +1,26 @@
 const express = require('express');
 const multer = require('multer');
-const cors = require('cors');
+const { spawn } = require('child_process');
+//const cors = require('cors');
 
 
 const app = express();
 const port = 3000;
 
-app.use(cors());
+//app.use(cors());
 // configure multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/')
-  },
-  filename: (req, file, cb) => {
-    const fileExt = file.originalname.split('.').pop();
-    const filename = `${file.fieldname}-${Date.now()}.${fileExt}`;
-    cb(null, filename);
-  }
-});
-
-// configure multer
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 // define endpoint for image upload
-app.post('/upload', upload.single('file'), (req, res) => {
-  console.log('File uploaded successfully!');
-  res.status(200).send('File uploaded successfully!');
+app.post('/upload-image', upload.single('image'), (req, res) => {
+  const image = req.file.buffer;
+  const pythonProcess = spawn('python', ['./ml_script/ClassifyImage.py', '--image', 'data:image/jpeg;base64,' + image.toString('base64'),'--function', 'ClassifyImage']);
+  console.log(pythonProcess);
+  pythonProcess.stdout.on('data', (data) => {
+    const result = data.toString();
+    console.log(result);
+    res.send(result);
+  });
 });
 
 // start server
