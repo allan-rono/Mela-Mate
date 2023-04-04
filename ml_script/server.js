@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const multer = require('multer');
 const { spawn } = require('child_process');
 const fs = require('fs');
@@ -6,6 +7,8 @@ const path = require('path');
 
 const app = express();
 const port = 3000;
+
+app.use(cors());
 
 // configure multer storage
 const upload = multer({
@@ -21,6 +24,11 @@ const upload = multer({
 
 // define endpoint for image upload
 app.post('/upload-image', upload.single('image'), (req, res) => {
+  if (!req.file) {
+    // No file was uploaded
+    return res.status(400).send('No file was uploaded');
+  }
+  
   const imgFile = req.file.path;
 
   // Run the Python script using spawn
@@ -46,7 +54,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
       res.status(500).send('An error occurred');
     } else {
 
-      console.log(`stdout: ${stdout}`);
+      console.log("------------------------------------------------");
 
       // Return the result back to the user
       const output = stdout.trim();
@@ -55,7 +63,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
       const melanomaProbability = parseFloat(probabilityLine);
       //const melanomaProbability = parseFloat(stdout.trim());
       console.log(`Melanoma probability: ${melanomaProbability}`);
-      res.send(`Melanoma probability: ${melanomaProbability}`);
+      res.send({ melanomaProbability });
       
       // Delete the file from the directory
       fs.unlink(imgFile, (err) => {
