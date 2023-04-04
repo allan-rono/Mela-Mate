@@ -1,19 +1,30 @@
 const express = require('express');
 const multer = require('multer');
 const { spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const port = 3000;
 
 // configure multer storage
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  }),
+});
 
 // define endpoint for image upload
 app.post('/upload-image', upload.single('image'), (req, res) => {
-  const imgFile = req.file.buffer;
+  const imgFile = req.file.path;
 
   // Run the Python script using spawn
-  const pythonProcess = spawn('python', ['melamate.py', 'test_img.jpg']); // pass file path as string
+  const pythonProcess = spawn('python', ['melamate.py', imgFile]); // pass file path as string
 
   // Collect the stdout from the Python script
   let stdout = '';
@@ -45,6 +56,15 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
       //const melanomaProbability = parseFloat(stdout.trim());
       console.log(`Melanoma probability: ${melanomaProbability}`);
       res.send(`Melanoma probability: ${melanomaProbability}`);
+      
+      // Delete the file from the directory
+      fs.unlink(imgFile, (err) => {
+        if (err) {
+          console.error(`Error deleting file ${imgFile}`, err);
+        } else {
+          console.log(`File ${imgFile} deleted successfully`);
+        }
+      });
     }
   });
 });
