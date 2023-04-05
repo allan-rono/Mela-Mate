@@ -28,4 +28,28 @@ jobs:
       run: |
         cd mela_mate-app
         npm install
+    - name: Build Angular application
+      run: |
+        cd mela_mate-app
+        ng build --configuration=production
+    - name: Install Python dependencies
+      run: |
+        cd ml_script
+        pip install -r requirements.txt
+
+    - name: Start backend server
+      run: |
+        cd ml_script
+        node server.js &
+
+    - name: Deploy to EC2
+      uses: appleboy/scp-action@v2
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        source: mela_mate-app/dist/
+        target: /var/www/html/
+        port: 22
+        strip_components: 2
 
