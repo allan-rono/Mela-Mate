@@ -35,7 +35,7 @@ export class UploadImageComponent {
     const formData = new FormData();
     formData.append('image', this.selectedFile, this.selectedFile.name);
 
-    this.http.post<any>('http://localhost:3000/upload-image', formData).subscribe(
+    this.http.post<any>('http://13.211.169.40:3000/upload-image', formData).subscribe(
       (response) => {
         const melanomaProbability = response.melanomaProbability;
         this.renderResponse(melanomaProbability);
