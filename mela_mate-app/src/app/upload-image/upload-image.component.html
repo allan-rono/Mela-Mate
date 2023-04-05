@@ -1,10 +1,12 @@
-<div>
-  <h2>Upload Image</h2>
-  <form>
-    <input type="file" (change)="onFileSelected($event)" />
-    <button type="submit" (click)="onSubmit($event)" class="btn btn-primary">Upload</button>
+<!-- Add a loading animation to the template -->
+<div *ngIf="loading" class="loading-animation">Loading...</div>
+
+<!-- Display the response or the form based on the value of the response variable -->
+<div *ngIf="!loading">
+  <form (submit)="onSubmit($event)">
+    <input type="file" (change)="onFileSelected($event)">
+    <button type="submit">Submit</button>
   </form>
-  <div>
-    <p>{{response}}</p>
-  </div>
+
+  <div #responseContainer>{{ response }}</div>
 </div>

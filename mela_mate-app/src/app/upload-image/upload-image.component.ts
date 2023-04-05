@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class UploadImageComponent {
   selectedFile: File | null = null;
   response: string = '';
+  loading: boolean = false; // add a loading variable
   @ViewChild('responseContainer', { read: ViewContainerRef, static: true })
   container!: ViewContainerRef;
 
@@ -21,12 +22,11 @@ export class UploadImageComponent {
 
   onFileSelected(event: any) {
     this.selectedFile = <File>event.target.files[0];
-    console.log(this.selectedFile);
   }
 
   onSubmit($event: { preventDefault: () => void; }) {
-    console.log("Submitting form...");
     $event.preventDefault();
+    this.loading = true; // set loading to true
 
     if (!this.selectedFile) {
       return;
@@ -39,19 +39,17 @@ export class UploadImageComponent {
       (response) => {
         const melanomaProbability = response.melanomaProbability;
         this.renderResponse(melanomaProbability);
+        this.loading = false; // set loading to false when response is received
       },
       (error) => {
         console.log(error);
+        this.loading = false; // set loading to false on error
       }
     );
   }
 
-
-
-
   renderResponse(response: any) {
     var percentage = (100-(response*100)).toFixed(2)
     this.response = "There is a probability of " + percentage + "% that this might be melanoma."
-
   }
 }
