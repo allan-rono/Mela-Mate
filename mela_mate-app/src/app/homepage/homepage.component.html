@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>melamate</title>
+    <link rel="stylesheet" type="text/css" href="/assets/melamate.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <style>
+      body {
+        background-color: lightblue;
+      }
+      h1 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1> <img src="assets/team logo.png" alt="Logo" class="logo">MelaMate</h1>
+    </div>
+    <div class="p-3 mb-2 bg-warning text-dark">
+      <i class="bi bi-brightness-high-fill"></i>
+      <nav>
+        <ul class="nav nav-pills nav-fill">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/upload-image">Mole Scanning Tool</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="melainfo.html">Learn more about melanoma<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-hospital" viewBox="0 0 16 16"></svg></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Dermatology clinics</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">SunSmart Advice & Prevention</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">UV & Recommendations</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">SunSmart Tools</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About Us</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8">
+            <figure>
+              <a href="https://www.google.com.au/url?sa=i&url=https%3A%2F%2Fwww.dreamstime.com%2Fillustration%2Fmole-skin.html&psig=AOvVaw0WPLuMGQJiOOnFumuyM8l8&ust=1680356212031000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCPjynuykhv4CFQAAAAAdAAAAABAo">
+                <img src="assets/mole1.jpg" alt="Mole image" class="img-fluid">
+              </a>
+              <figcaption class="figure-caption">Image source: <a href="https://www.google.com.au/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fillustrations%2Fmole-skin&psig=AOvVaw2qC84CzOKfEYVSdROMMe_k&ust=1680494150897000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCOiRg9umiv4CFQAAAAAdAAAAABAD">https://www.istockphoto.com/illustrations/mole-skin</a></figcaption>
+            </figure>
+          </div>
+          <div class="col-md-4">
+            <h2>Welcome to MelaMate</h2>
+            <p>Hello, there. MelaMate is a free website that can help you learn about melanoma and how to prevent it. You can also see scan mole images on your skin, but always remember that only a doctor can give you a truly reliable diagnosis and advice. You can go to different pages by clicking on the navigator bar. You can see instructions on the cards blow, and you can also go to functional tools by clicking the button on card. Melamate is your best mate!!!</p>
+          </div>
+        </div>
+      </div>
+
+        <h1>What can you do on the website?</h1>
+        <div class="container">
+          <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+              <div class="card h-100">
+                <img src="assets/moles.JPG" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Scan your mole</h5>
+                  <p class="card-text">Quickly mole scannong by clicking on "Mole Scanning Tool" button, and upload an image of mole. Clicking "GO" button to access mole scanning.</p>
+                  <a routerLink="/upload-image" class="btn btn-primary">Go</a>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <img src="assets/info.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Learning knowledge about melanoma</h5>
+                  <p class="card-text">You can learn how melanoma is diagonsed, see risky changes in mole appearance, and a chart of different classifications of melanoma. Clicking "GO" button to start learning.</p>
+                  <a href="melainfo.html" class="btn btn-primary">Go</a>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <img src="assets/clinic.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Find a local dermatology clinic</h5>
+                  <p class="card-text">You can find dermatology hospitals by typing in your post code.</p>
+                  <a href="#" class="btn btn-primary">Go</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="card h-100">
+                <img src="assets/uv.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Learning SunSmart Advice and some prevention method</h5>
+                  <p class="card-text">In this section, you will learn how to protect yourself from strong sunlight.</p>
+                  <a href="#" class="btn btn-primary">Go</a>
+                </div>
+              </div>
+            </div>
+             <div class="col">
+              <div class="card h-100">
+                <img src="assets/UV level example.PNG" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Checking UV risks and recommandations</h5>
+                  <p class="card-text">You can check current UV level, and be prepared if there is dangerous UV level.</p>
+                  <a href="#" class="btn btn-primary">Go</a>
+                </div>
+              </div>
+            </div>
+             <div class="col">
+              <div class="card h-100">
+                <img src="assets/tools.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Access SunsSmart tools</h5>
+                  <p class="card-text">Checking how SunSmart you are by taking the SunSmart assignment.</p>
+                  <a href="#" class="btn btn-primary">Go</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </body>
+</html>
