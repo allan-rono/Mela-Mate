@@ -29,8 +29,3 @@ jobs:
         cd mela_mate-app
         npm install
 
-    - name: Build Angular application
-      run: |
-        cd mela_mate-app
-        npm run build -- --prod
-
