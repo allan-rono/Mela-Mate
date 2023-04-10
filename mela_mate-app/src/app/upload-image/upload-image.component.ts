@@ -25,31 +25,38 @@ export class UploadImageComponent {
   }
 
   onSubmit($event: { preventDefault: () => void; }) {
-    $event.preventDefault();
-    this.loading = true; // set loading to true
+  $event.preventDefault();
+  this.loading = true; // set loading to true
+  if (!this.selectedFile) {
+    return;
+  }
 
-    if (!this.selectedFile) {
-      return;
-    }
+  const formData = new FormData();
+  formData.append('image', this.selectedFile);
+  console.log(formData);
 
-    const formData = new FormData();
-    formData.append('image', this.selectedFile, this.selectedFile.name);
-
-    this.http.post<any>('http://localhost:3000/upload-image', formData).subscribe(
-      (response) => {
-        const melanomaProbability = response.melanomaProbability;
-        this.renderResponse(melanomaProbability);
-        this.loading = false; // set loading to false when response is received
-      },
-      (error) => {
-        console.log(error);
-        this.loading = false; // set loading to false on error
+  this.http.post<any>('http://3.25.188.120:3000/upload-image', formData, { responseType: 'json' }).subscribe(
+    (response) => {
+      console.log(response);
+      if (response && response.probability) {
+        const probability = response.probability
+        console.log(probability);
+        this.renderResponse(probability);
+      } else {
+        console.error('Invalid response format');
       }
+    },
+    (error) => {
+      console.error(error);
+    },
+    () => {
+      this.loading = false; // set loading to false when response is received or when an error occurs
+    }
     );
   }
 
-  renderResponse(response: any) {
-    var percentage = (100-(response*100)).toFixed(2)
-    this.response = "There is a probability of " + percentage + "% that this might be melanoma."
+    renderResponse(response: any) {
+      var percentage = (100-(response*100)).toFixed(2)
+      this.response = "There is a probability of " + percentage + "% that this might be melanoma."
+    }
   }
-}

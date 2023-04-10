@@ -1,38 +1,37 @@
 const express = require('express');
-const cors = require('cors');
-const multer = require('multer');
+const app = express();
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-
-const app = express();
-const port = 3000;
-
+const multer  = require('multer');
+const cors = require('cors')
 app.use(cors());
+// Create a temporary directory to store the uploaded image
+const tempDir = path.join(__dirname, 'temp');
+if (!fs.existsSync(tempDir)) {
+  fs.mkdirSync(tempDir);
+}
 
-// configure multer storage
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-      cb(null, `${Date.now()}-${file.originalname}`);
-    },
-  }),
-});
-
-// define endpoint for image upload
-app.post('/upload-image', upload.single('image'), (req, res) => {
-  if (!req.file) {
-    // No file was uploaded
-    return res.status(400).send('No file was uploaded');
+// Define the multer storage configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, tempDir)
+  },
+  filename: function (req, file, cb) {
+    cb(null, `image-${Date.now()}.jpg`)
   }
-  
-  const imgFile = req.file.path;
+})
 
-  // Run the Python script using spawn
-  const pythonProcess = spawn('python', ['melamate.py', imgFile]); // pass file path as string
+// Create a multer instance with the storage configuration
+const upload = multer({ storage: storage })
+
+// Define the route for uploading an image
+app.post('/upload-image', upload.single('image'), (req, res) => {
+  // Get the path of the uploaded image file
+  const imgPath = req.file.path;
+
+  // Spawn a new Python process to run the script
+  const pythonProcess = spawn('python3', ['melamate.py', imgPath]);
 
   // Collect the stdout from the Python script
   let stdout = '';
@@ -44,7 +43,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
   let stderr = '';
   pythonProcess.stderr.on('data', (data) => {
     stderr += data.toString();
-  });
+ });
 
   // Handle the exit code of the Python script
   pythonProcess.on('exit', (code) => {
@@ -53,31 +52,39 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
       console.error(stderr);
       res.status(500).send('An error occurred');
     } else {
-
-      console.log("------------------------------------------------");
-
       // Return the result back to the user
+      const data = {
+        probability: 0.35592657
+      };
+
       const output = stdout.trim();
-      const lines = output.split('\n');
-      const probabilityLine = lines[lines.length - 4];
-      const melanomaProbability = parseFloat(probabilityLine);
-      //const melanomaProbability = parseFloat(stdout.trim());
-      console.log(`Melanoma probability: ${melanomaProbability}`);
-      res.send({ melanomaProbability });
-      
+      const regex = /\d+\.\d+/; // match any number with decimal points
+      const match = output.match(regex);
+
+      let probability = 0;
+
+      if (match) {
+        probability = parseFloat(match[0]);
+      }
+      const probabilityJson = {
+        probability: probability
+      };
+
+      console.log(probabilityJson);
+      res.json(probabilityJson);
+
       // Delete the file from the directory
-      fs.unlink(imgFile, (err) => {
+      fs.unlink(imgPath, (err) => {
         if (err) {
-          console.error(`Error deleting file ${imgFile}`, err);
+          console.error(`Error deleting file ${imgPath}`, err);
         } else {
-          console.log(`File ${imgFile} deleted successfully`);
+          console.log(`File ${imgPath} deleted successfully`);
         }
       });
     }
   });
 });
 
-// start server
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
-});
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});                                                                                                                                         1,8           Top
