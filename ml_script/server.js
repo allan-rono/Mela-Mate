@@ -87,4 +87,4 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
 
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
-});                                                                                                                                         1,8           Top
+});                                                                                                                                        

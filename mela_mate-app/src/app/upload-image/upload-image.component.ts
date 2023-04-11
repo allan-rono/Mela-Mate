@@ -35,7 +35,7 @@ export class UploadImageComponent {
   formData.append('image', this.selectedFile);
   console.log(formData);
 
-  this.http.post<any>('http://3.25.188.120:3000/upload-image', formData, { responseType: 'json' }).subscribe(
+  this.http.post<any>('http://3.27.64.81:3000/upload-image', formData, { responseType: 'json' }).subscribe(
     (response) => {
       console.log(response);
       if (response && response.probability) {
