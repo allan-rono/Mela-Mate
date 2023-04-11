@@ -24,23 +24,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: Install dependencies
-      run: |
-        cd mela_mate-app
-        npm install
     - name: Build Angular application
       run: |
-        cd mela_mate-app
+        cd /home/ec2-user/actions-runner/_work/Mela-Mate/Mela-Mate/mela_mate-app
         ng build --configuration=production
-    - name: Install Python dependencies
-      run: |
-        cd ml_script
-        pip install -r requirements.txt
-
     - name: Start backend server
       run: |
-        cd ml_script
-        node server.js &
+        cd /home/ec2-user/actions-runner/_work/Mela-Mate/Mela-Mate/ml_script
+        pm2 stop 0
+        pm2 start server.js &
 
     - name: Deploy to EC2
       uses: appleboy/scp-action@v2
@@ -52,4 +44,3 @@ jobs:
         target: /var/www/html/
         port: 22
         strip_components: 2
-
